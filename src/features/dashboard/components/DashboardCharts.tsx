@@ -169,6 +169,7 @@ export const DashboardCharts = ({ transactions }: Props) => {
                     outerRadius={90}
                     paddingAngle={2}
                     dataKey="value"
+                    stroke="none"
                   />
                   <Tooltip
                     contentStyle={{

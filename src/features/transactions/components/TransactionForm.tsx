@@ -34,6 +34,7 @@ export const TransactionForm = () => {
       <Button
         disabled
         variant="outline"
+        size="sm"
         className="opacity-50 cursor-not-allowed"
       >
         <Plus className="size-4 mr-2" /> Viewer Mode
@@ -60,8 +61,10 @@ export const TransactionForm = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="inline-flex h-9 items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground shadow-sm transition-all hover:bg-primary/90">
-        <Plus className="size-4 mr-2" /> Add Transaction
+      <DialogTrigger asChild>
+        <Button size="sm">
+          <Plus className="size-4 mr-2" /> Add Transaction
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-105">
         <DialogHeader>

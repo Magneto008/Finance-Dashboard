@@ -19,7 +19,7 @@ export const DashboardSummary = ({ transactions }: Props) => {
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <Card className="border-primary/20 transition-transform hover:scale-[1.02]">
+      <Card className="border-primary/20 transition-transform">
         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
           <CardTitle className="text-sm font-medium">Total Balance</CardTitle>
           <div className="bg-primary/20 p-2 rounded-full">
@@ -34,7 +34,7 @@ export const DashboardSummary = ({ transactions }: Props) => {
         </CardContent>
       </Card>
 
-      <Card className="border-green-500/20 transition-transform hover:scale-[1.02]">
+      <Card className="border-green-500/20 transition-transform">
         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
           <CardTitle className="text-sm font-medium">Income</CardTitle>
           <div className="bg-green-500/20 p-2 rounded-full">
@@ -51,7 +51,7 @@ export const DashboardSummary = ({ transactions }: Props) => {
         </CardContent>
       </Card>
 
-      <Card className="border-destructive/20 transition-transform hover:scale-[1.02]">
+      <Card className="border-destructive/20 transition-transform">
         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
           <CardTitle className="text-sm font-medium">Expenses</CardTitle>
           <div className="bg-destructive/20 p-2 rounded-full">

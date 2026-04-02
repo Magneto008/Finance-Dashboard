@@ -47,7 +47,11 @@ const MainLayout = () => {
     "dashboard" | "transactions" | "insights"
   >(() => {
     const saved = localStorage.getItem("finance-dashboard-active-tab");
-    if (saved === "dashboard" || saved === "transactions" || saved === "insights") {
+    if (
+      saved === "dashboard" ||
+      saved === "transactions" ||
+      saved === "insights"
+    ) {
       return saved as "dashboard" | "transactions" | "insights";
     }
     return "dashboard";
@@ -180,44 +184,46 @@ const MainLayout = () => {
               </div>
             )}
 
-            <div className="flex-1 md:flex-none">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="w-full whitespace-nowrap"
-                    disabled={!filteredTransactions.length}
-                  >
-                    <Download className="size-4 mr-2" />
-                    Export
-                  </Button>
-                </DropdownMenuTrigger>
+            {activeTab === "transactions" && (
+              <div className="flex-1 md:flex-none">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full whitespace-nowrap"
+                      disabled={!filteredTransactions.length}
+                    >
+                      <Download className="size-4 mr-2" />
+                      Export
+                    </Button>
+                  </DropdownMenuTrigger>
 
-                <DropdownMenuContent align="end" className="w-44">
-                  <DropdownMenuItem
-                    onClick={() => exportToJSON(filteredTransactions)}
-                  >
-                    <FileDown className="size-4 mr-2" />
-                    JSON
-                  </DropdownMenuItem>
+                  <DropdownMenuContent align="end" className="w-44">
+                    <DropdownMenuItem
+                      onClick={() => exportToJSON(filteredTransactions)}
+                    >
+                      <FileDown className="size-4 mr-2" />
+                      JSON
+                    </DropdownMenuItem>
 
-                  <DropdownMenuItem
-                    onClick={() => exportToCSV(filteredTransactions)}
-                  >
-                    <FileDown className="size-4 mr-2" />
-                    CSV
-                  </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => exportToCSV(filteredTransactions)}
+                    >
+                      <FileDown className="size-4 mr-2" />
+                      CSV
+                    </DropdownMenuItem>
 
-                  <DropdownMenuItem
-                    onClick={() => exportToExcel(filteredTransactions)}
-                  >
-                    <Download className="size-4 mr-2" />
-                    Excel
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+                    <DropdownMenuItem
+                      onClick={() => exportToExcel(filteredTransactions)}
+                    >
+                      <Download className="size-4 mr-2" />
+                      Excel
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
           </div>
         </div>
 

@@ -22,11 +22,11 @@ export type FilterCondition = {
 export type FilterGroup = {
   id: string;
   conditionJoin: LogicalOperator;
-  conditions: FilterCondition[]; // Conditions combined by selected join operator
+  conditions: FilterCondition[];
 };
 
 export type AppState = {
   transactions: Transaction[];
   role: Role;
-  filterGroups: FilterGroup[]; // Groups combined by OR
+  filterGroups: FilterGroup[];
 };

@@ -4,9 +4,6 @@ const DB_NAME = "FinanceDashboardDB";
 const STORE_NAME = "transactions";
 const DB_VERSION = 1;
 
-/**
- * Initialize IndexedDB and create object store if it doesn't exist
- */
 export const initDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
@@ -23,9 +20,6 @@ export const initDB = (): Promise<IDBDatabase> => {
   });
 };
 
-/**
- * Retrieve all transactions from the database
- */
 export const getTransactions = async (): Promise<Transaction[]> => {
   const db = await initDB();
   return new Promise((resolve, reject) => {
@@ -38,10 +32,9 @@ export const getTransactions = async (): Promise<Transaction[]> => {
   });
 };
 
-/**
- * Add a single transaction to the database
- */
-export const addTransaction = async (transaction: Transaction): Promise<void> => {
+export const addTransaction = async (
+  transaction: Transaction,
+): Promise<void> => {
   const db = await initDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, "readwrite");
@@ -53,18 +46,15 @@ export const addTransaction = async (transaction: Transaction): Promise<void> =>
   });
 };
 
-/**
- * Save an array of transactions in bulk. Overwrites existing data.
- */
-export const saveTransactions = async (transactions: Transaction[]): Promise<void> => {
+export const saveTransactions = async (
+  transactions: Transaction[],
+): Promise<void> => {
   const db = await initDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, "readwrite");
     const store = tx.objectStore(STORE_NAME);
-    
-    // Clear existing data before bulk inserting new transactions
     const clearRequest = store.clear();
-    
+
     clearRequest.onsuccess = () => {
       transactions.forEach((txData) => store.add(txData));
     };

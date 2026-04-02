@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowDownAZ, ArrowUpAZ, Search } from "lucide-react";
+import { ArrowDownAZ, ArrowUpAZ, Clock3, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -128,10 +128,11 @@ export const TransactionTable = ({ transactions }: Props) => {
   };
 
   return (
-    <Card className="overflow-hidden py-0 gap-0">
+    <Card className="overflow-hidden py-0 gap-0 rounded-lg">
       <CardHeader className="border-b bg-muted/20 py-4 px-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <CardTitle className="text-lg font-semibold text-foreground">
+          <CardTitle className="text-lg font-semibold text-foreground flex items-center gap-2">
+            <Clock3 className="size-5 text-primary" />
             Transaction History
           </CardTitle>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -143,14 +144,14 @@ export const TransactionTable = ({ transactions }: Props) => {
                     placeholder="Search..."
                     value={searchTerm}
                     onChange={(event) => setSearchTerm(event.target.value)}
-                    className="pl-9 bg-background focus-visible:ring-1"
+                    className="pl-9 focus-visible:ring-1"
                   />
                 </div>
               </TooltipTrigger>
               <TooltipContent
                 side="bottom"
                 align="start"
-                className="p-3 shadow-xl border-border bg-popover text-popover-foreground max-w-80"
+                className="p-3 shadow-xl border-border border bg-popover text-popover-foreground max-w-80"
               >
                 <div className="space-y-2">
                   <p className="font-semibold text-xs text-primary flex items-center gap-1.5">
@@ -173,7 +174,6 @@ export const TransactionTable = ({ transactions }: Props) => {
               </TooltipContent>
             </Tooltip>
 
-            {/* Filter & Sort Controls */}
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <Select
                 value={typeFilter}
@@ -181,7 +181,7 @@ export const TransactionTable = ({ transactions }: Props) => {
                   value && setTypeFilter(value as "all" | "income" | "expense")
                 }
               >
-                <SelectTrigger className="w-27.5 bg-background flex-1 sm:flex-none">
+                <SelectTrigger className="w-27.5 flex-1 sm:flex-none">
                   <SelectValue placeholder="Type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -197,7 +197,7 @@ export const TransactionTable = ({ transactions }: Props) => {
                   value && setSortField(value as SortField)
                 }
               >
-                <SelectTrigger className="w-27.5 bg-background flex-1 sm:flex-none">
+                <SelectTrigger className="w-27.5 flex-1 sm:flex-none">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
@@ -277,7 +277,7 @@ export const TransactionTable = ({ transactions }: Props) => {
                     </TableCell>
                     <TableCell
                       className={cn(
-                        "text-right font-bold font-mono",
+                        "text-right",
                         t.type === "income"
                           ? "text-emerald-600 dark:text-emerald-400"
                           : "text-foreground",

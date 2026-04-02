@@ -128,7 +128,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
           >
             Clear All
           </Button>
-          <Button onClick={addGroup} className="w-full sm:w-auto">
+          <Button size="sm" onClick={addGroup} className="w-full sm:w-auto">
             <Plus className="size-4 mr-2" /> Add Filter Group
           </Button>
         </div>
@@ -151,7 +151,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
 
             <Card className="overflow-hidden py-0 gap-0 shadow-md transition-all">
               {/* Group Header: Join Logic & Delete */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-4 py-3 bg-muted/40 border-b border-border/50">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-4 py-3 bg-muted/20 border-b border-border/50">
                 <div className="flex flex-wrap items-center gap-2 text-sm">
                   <span className="text-muted-foreground font-medium">
                     Match
@@ -162,7 +162,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
                       updateGroupJoinOperator(group.id, val as LogicalOperator)
                     }
                   >
-                    <SelectTrigger className="w-24 h-8 bg-background font-semibold">
+                    <SelectTrigger className="w-24 h-8 font-semibold">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -191,7 +191,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
               </div>
 
               {/* Group Body: Conditions List */}
-              <div className="p-4 space-y-3 bg-muted/90">
+              <div className="p-4 space-y-3">
                 {group.conditions.length === 0 && (
                   <p className="text-sm text-muted-foreground italic py-2 text-center">
                     No rules in this group yet.
@@ -212,7 +212,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
                         })
                       }
                     >
-                      <SelectTrigger className="w-full sm:w-40 bg-background">
+                      <SelectTrigger className="w-full sm:w-40">
                         <SelectValue placeholder="Select Field" />
                       </SelectTrigger>
                       <SelectContent>
@@ -233,7 +233,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
                         })
                       }
                     >
-                      <SelectTrigger className="w-full sm:w-32.5 bg-background">
+                      <SelectTrigger className="w-full sm:w-32.5">
                         <SelectValue placeholder="Operator" />
                       </SelectTrigger>
                       <SelectContent>
@@ -247,7 +247,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
 
                     {/* Value Input */}
                     <Input
-                      className="flex-1 min-w-37.5 bg-background"
+                      className="flex-1 min-w-37.5"
                       value={cond.value}
                       placeholder="Enter value..."
                       onChange={(e) =>
