@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAppContext } from "@/app/context/AppContext";
 import { useTheme } from "@/app/context/ThemeContext";
+import { cn } from "@/lib/utils";
 
 const MainLayout = () => {
   const { state, dispatch } = useAppContext();
@@ -110,6 +111,35 @@ const MainLayout = () => {
               </Select>
             </div>
 
+            {/* Mobile Role Switcher */}
+            <div className="sm:hidden">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-8 rounded-full border border-border"
+                  >
+                    {state.role === "admin" ? (
+                      <ShieldAlert className="size-4" />
+                    ) : (
+                      <User className="size-4" />
+                    )}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => handleSetRole("admin")}>
+                    <ShieldAlert className="size-4 mr-2" />
+                    Admin
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleSetRole("viewer")}>
+                    <User className="size-4 mr-2" />
+                    Viewer
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+
             {/* Theme Toggle */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -177,15 +207,25 @@ const MainLayout = () => {
           </div>
 
           {/* RIGHT: Actions */}
-          <div className="flex items-center gap-2 w-full md:w-auto">
-            {activeTab === "transactions" && (
+          <div
+            className={cn(
+              "flex items-center gap-2 w-full md:w-auto",
+              activeTab === "transactions" && state.role === "viewer" && "w-full",
+            )}
+          >
+            {activeTab === "transactions" && state.role === "admin" && (
               <div className="flex-1 md:flex-none">
                 <TransactionForm />
               </div>
             )}
 
             {activeTab === "transactions" && (
-              <div className="flex-1 md:flex-none">
+              <div
+                className={cn(
+                  "flex-1 md:flex-none",
+                  state.role === "viewer" && "w-full",
+                )}
+              >
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
