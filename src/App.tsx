@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { AppProvider } from "@/app/providers/AppProvider";
 import { ThemeProvider } from "@/app/providers/ThemeProvider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { DashboardSummary } from "@/features/dashboard/components/DashboardSummary";
 import { DashboardCharts } from "@/features/dashboard/components/DashboardCharts";
 import { TransactionTable } from "@/features/transactions/components/TransactionTable";
@@ -260,7 +261,9 @@ export default function App() {
   return (
     <ThemeProvider defaultTheme="system" storageKey="finance-dashboard-theme">
       <AppProvider>
-        <MainLayout />
+        <TooltipProvider>
+          <MainLayout />
+        </TooltipProvider>
       </AppProvider>
     </ThemeProvider>
   );
