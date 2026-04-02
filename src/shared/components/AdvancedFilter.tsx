@@ -133,7 +133,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
         </div>
       </div>
 
-      {/* Empty State */}
+      {/* Empty State
       {filterGroups.length === 0 && (
         <div className="text-center py-12 border-2 border-dashed border-border rounded-lg bg-muted/10">
           <p className="text-muted-foreground text-sm">
@@ -147,7 +147,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
             Create your first filter
           </Button>
         </div>
-      )}
+      )} */}
 
       {/* Groups Mapping */}
       <div className="space-y-4">
@@ -164,7 +164,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
               </div>
             )}
 
-            <Card className="overflow-hidden border border-border/80 shadow-sm transition-all hover:border-primary/40 focus-within:border-primary/40 focus-within:ring-1 focus-within:ring-primary/20">
+            <Card className="overflow-hidden py-0 gap-0 shadow-md transition-all">
               {/* Group Header: Join Logic & Delete */}
               <div className="flex items-center justify-between px-4 py-3 bg-muted/40 border-b border-border/50">
                 <div className="flex items-center gap-2 text-sm">
@@ -206,7 +206,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
               </div>
 
               {/* Group Body: Conditions List */}
-              <div className="p-4 space-y-3 bg-card">
+              <div className="p-4 space-y-3 bg-muted/90">
                 {group.conditions.length === 0 && (
                   <p className="text-sm text-muted-foreground italic py-2 text-center">
                     No rules in this group yet.

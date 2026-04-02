@@ -161,8 +161,8 @@ export const TransactionTable = ({ transactions }: Props) => {
       <CardContent className="p-0">
         <div className="overflow-x-auto">
           <Table>
-            <TableHeader className="bg-muted/40">
-              <TableRow>
+            <TableHeader className="bg-muted/60">
+              <TableRow className="hover:bg-transparent">
                 <TableHead className="w-20">ID</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Category</TableHead>

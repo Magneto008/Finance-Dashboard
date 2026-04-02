@@ -73,9 +73,9 @@ const MainLayout = () => {
             {/* Role Switcher */}
             <div className="flex items-center gap-2 max-sm:hidden">
               {state.role === "admin" ? (
-                <ShieldAlert className="size-4 text-muted-foreground" />
+                <ShieldAlert className="size-5 text-muted-foreground" />
               ) : (
-                <User className="size-4 text-muted-foreground" />
+                <User className="size-5 text-muted-foreground" />
               )}
               <Select
                 value={state.role}
