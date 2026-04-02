@@ -1,80 +1,96 @@
 # Finance Dashboard
 
-A React + TypeScript personal finance dashboard for tracking income and expenses, visualizing trends, filtering data, and exporting reports.
+React + TypeScript dashboard for tracking income/expenses, filtering transactions, viewing insights, and exporting reports.
 
-## Setup Instructions
+## Assignment Highlights (Features Overview)
+
+- [x] **Dashboard Overview:** Summary cards, Recharts Area chart (balance trend), and Recharts Pie chart (spending breakdown).
+- [x] **Transactions Section:** Full data table with mock data, column sorting, type filtering, and advanced natural-language date search.
+- [x] **Insights Section:** Dynamic calculation of Savings Rate, Monthly Comparisons, and Top Expenses.
+- [x] **Role-Based UI:** Simulated `admin` (can add transactions) vs `viewer` (read-only) modes.
+- [x] **State Management:** Extensively modeled with React state and Context.
+- [x] **Optional Enhancements:** Includes Dark Mode, Data Persistence (IndexedDB), Multi-format Export (CSV, JSON, Excel), and Advanced Filtering (Chrono-node natural language search).
+
+## Setup
 
 ### Prerequisites
-- Node.js 20+ (recommended)
+- Node.js 20+
 - npm 10+
 
-### Install and run
+### Run locally
 ```bash
 npm install
 npm run dev
 ```
 
-Open the local URL shown by Vite (usually `http://localhost:5173`).
+Open the Vite URL (usually `http://localhost:5173`).
 
-### Other scripts
+### Scripts
 ```bash
-npm run build   # Type-check + production build
-npm run preview # Preview built app locally
-npm run lint    # Run ESLint
+npm run lint
+npm run build
+npm run preview
 ```
 
-## Overview of Approach
+## Project Structure (Current)
 
-- Feature-first structure: code is organized by domain (`dashboard`, `transactions`, `insights`) with shared UI/components/utilities.
-- Central app state: a React Context + `useReducer` handles transactions, role (`admin`/`viewer`), and advanced filter groups.
-- Browser persistence:
-  - Transactions are stored in IndexedDB (`FinanceDashboardDB`).
-  - Theme preference is persisted in IndexedDB (`FinanceDashboardPreferences`).
-  - Active tab state is persisted in `localStorage`.
-- Data flow:
-  - App boots by loading transactions from IndexedDB.
-  - If empty, mock transactions are seeded.
-  - All charts, summaries, and insight cards are derived from current state.
-- UI stack:
-  - Tailwind CSS + shadcn/ui components for layout and controls.
-  - Recharts for balance trend and expense breakdown charts.
+- `src/app`: app shell, providers, context
+- `src/features/dashboard`: summary + charts
+- `src/features/transactions`: table, form, export, DB helpers
+- `src/features/filters`: advanced filter UI + filter logic
+- `src/features/insights`: insight cards + metrics calculation logic
+- `src/shared`: cross-feature types
 
-## Features Explained
+## Data Flow
 
-### 1) Dashboard
-- Summary cards show total balance, income, and expenses.
-- Charts include:
-  - Running balance over time (area chart).
-  - Expense split by category (pie chart).
+- App loads transactions from IndexedDB (`FinanceDashboardDB`).
+- If DB is empty, mock transactions are seeded.
+- Filters and search are applied in memory.
+- Dashboard and Insights are derived from current transaction state.
 
-### 2) Transactions
-- Add transactions (admin role only).
-- Search with natural-language date support (e.g. "last week", "February") using `chrono-node`.
-- Filter by type, sort by multiple fields, and toggle sort direction.
-- Transaction table with badges and formatted currency values.
+## Transactions: Natural-Language Search
 
-### 3) Advanced Filtering
-- Supports grouped conditions for complex queries.
-- Logic model:
-  - Conditions inside a group use `AND` or `OR`.
-  - Groups are combined with `OR`.
+- Search uses `chrono-node` to parse date-like terms.
+- Works with terms like `last week`, `yesterday`, `February`, `2023`, `last year`.
+- Parsing behavior:
+- If input resolves to a date range, transactions inside the range match.
+- If input resolves to a specific date parts (year/month/day), those parts are matched.
+- Non-date matching still works on `id`, `date`, `category`, `type`, and `amount` text.
+- Search is combined with type filter + sorting + pagination.
 
-### 4) Insights
-- Displays derived metrics such as:
-  - Top expense category
-  - Savings rate
-  - Month-over-month expense delta
-  - Average expense size
-  - Total income/expenses
-  - Net balance and latest activity
+## Advanced Filter Logic
 
-### 5) Export
-- Export currently filtered transactions to:
-  - JSON
-  - CSV
-  - Excel (`.xlsx`)
+- Filters are organized in groups.
+- Inside each group, rules use either `AND` (match all) or `OR` (match any).
+- Across groups, evaluation uses `OR`.
+- If no filter rules exist, all transactions are returned.
 
-### 6) UX and Preferences
-- Light, dark, and system theme support.
-- Sticky header and responsive tabbed layout.
-- Role switcher (`admin` / `viewer`) with UI-level permission behavior.
+## Insights: How Values Are Calculated
+
+- `Top Expense Category`: category with highest summed expense amount.
+- `Savings Rate`: `((totalIncome - totalExpense) / totalIncome) * 100`.
+- `Monthly Comparison`: percent delta between latest month expense and previous month expense.
+- `Avg Transaction Size`: average of expense transaction amounts.
+- `Total Income`: sum of all `income` transactions.
+- `Total Expenses`: sum of all `expense` transactions.
+- `Net Balance`: `totalIncome - totalExpense`.
+- `Activity Log`: total transaction count + latest transaction date.
+
+## Dashboard Charts
+
+- Balance History (area chart): running balance over time by date.
+- Expense Breakdown (pie chart): expense totals grouped by category.
+
+## Export
+
+- Export filtered transactions to:
+- JSON (`transactions.json`)
+- CSV (`transactions.csv`)
+- Excel (`transactions.xlsx`)
+
+## Roles and UX
+
+- `admin`: can add transactions.
+- `viewer`: read-only.
+- Theme modes: `light`, `dark`, `system`.
+- Active tab and some UI preferences are persisted locally.
