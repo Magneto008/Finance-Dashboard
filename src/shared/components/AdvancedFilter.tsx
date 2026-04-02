@@ -112,22 +112,23 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
       {/* Header Section */}
       <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center bg-muted/30 p-4 rounded-lg border border-border/50">
         <div>
-          <h3 className="font-semibold text-lg flex items-center gap-2">
-            <Filter className="size-5 text-primary" /> Advanced Filters
+          <h3 className="font-semibold text-md flex items-center gap-2">
+            <Filter className="size-5 text-primary" /> Filters
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
             Build complex queries to filter your transactions.
           </p>
         </div>
         <div className="flex flex-col-reverse sm:flex-row w-full gap-2 sm:w-auto shrink-0">
-          <Button
-            variant="ghost"
-            onClick={clearFilters}
-            disabled={filterGroups.length === 0}
-            className="w-full sm:w-auto"
-          >
-            Clear All
-          </Button>
+          {filterGroups.length > 0 && (
+            <Button
+              variant="ghost"
+              onClick={clearFilters}
+              className="w-full sm:w-auto"
+            >
+              Clear All
+            </Button>
+          )}
           <Button size="sm" onClick={addGroup} className="w-full sm:w-auto">
             <Plus className="size-4 mr-2" /> Add Filter Group
           </Button>
@@ -149,7 +150,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
               </div>
             )}
 
-            <Card className="overflow-hidden py-0 gap-0 shadow-md transition-all">
+            <Card className="overflow-hidden py-0 gap-0 shadow-md transition-all rounded-lg">
               {/* Group Header: Join Logic & Delete */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-4 py-3 bg-muted/20 border-b border-border/50">
                 <div className="flex flex-wrap items-center gap-2 text-sm">

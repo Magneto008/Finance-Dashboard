@@ -1,75 +1,80 @@
-# React + TypeScript + Vite
+# Finance Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React + TypeScript personal finance dashboard for tracking income and expenses, visualizing trends, filtering data, and exporting reports.
 
-Currently, two official plugins are available:
+## Setup Instructions
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Prerequisites
+- Node.js 20+ (recommended)
+- npm 10+
 
-## React Compiler
-
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
-
-Note: This will impact Vite dev & build performances.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Install and run
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open the local URL shown by Vite (usually `http://localhost:5173`).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Other scripts
+```bash
+npm run build   # Type-check + production build
+npm run preview # Preview built app locally
+npm run lint    # Run ESLint
 ```
+
+## Overview of Approach
+
+- Feature-first structure: code is organized by domain (`dashboard`, `transactions`, `insights`) with shared UI/components/utilities.
+- Central app state: a React Context + `useReducer` handles transactions, role (`admin`/`viewer`), and advanced filter groups.
+- Browser persistence:
+  - Transactions are stored in IndexedDB (`FinanceDashboardDB`).
+  - Theme preference is persisted in IndexedDB (`FinanceDashboardPreferences`).
+  - Active tab state is persisted in `localStorage`.
+- Data flow:
+  - App boots by loading transactions from IndexedDB.
+  - If empty, mock transactions are seeded.
+  - All charts, summaries, and insight cards are derived from current state.
+- UI stack:
+  - Tailwind CSS + shadcn/ui components for layout and controls.
+  - Recharts for balance trend and expense breakdown charts.
+
+## Features Explained
+
+### 1) Dashboard
+- Summary cards show total balance, income, and expenses.
+- Charts include:
+  - Running balance over time (area chart).
+  - Expense split by category (pie chart).
+
+### 2) Transactions
+- Add transactions (admin role only).
+- Search with natural-language date support (e.g. "last week", "February") using `chrono-node`.
+- Filter by type, sort by multiple fields, and toggle sort direction.
+- Transaction table with badges and formatted currency values.
+
+### 3) Advanced Filtering
+- Supports grouped conditions for complex queries.
+- Logic model:
+  - Conditions inside a group use `AND` or `OR`.
+  - Groups are combined with `OR`.
+
+### 4) Insights
+- Displays derived metrics such as:
+  - Top expense category
+  - Savings rate
+  - Month-over-month expense delta
+  - Average expense size
+  - Total income/expenses
+  - Net balance and latest activity
+
+### 5) Export
+- Export currently filtered transactions to:
+  - JSON
+  - CSV
+  - Excel (`.xlsx`)
+
+### 6) UX and Preferences
+- Light, dark, and system theme support.
+- Sticky header and responsive tabbed layout.
+- Role switcher (`admin` / `viewer`) with UI-level permission behavior.

@@ -30,16 +30,7 @@ export const TransactionForm = () => {
   const [type, setType] = useState<Transaction["type"]>("expense");
 
   if (state.role !== "admin") {
-    return (
-      <Button
-        disabled
-        variant="outline"
-        size="sm"
-        className="opacity-50 cursor-not-allowed"
-      >
-        <Plus className="size-4 mr-2" /> Viewer Mode
-      </Button>
-    );
+    return null;
   }
 
   const handleSubmit = (e: SubmitEvent) => {
