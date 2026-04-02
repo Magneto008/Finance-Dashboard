@@ -2,7 +2,7 @@
 
 React + TypeScript dashboard for tracking income/expenses, filtering transactions, viewing insights, and exporting reports.
 
-## Assignment Highlights (Features Overview)
+## Features Overview
 
 - [x] **Dashboard Overview:** Summary cards, Recharts Area chart (balance trend), and Recharts Pie chart (spending breakdown).
 - [x] **Transactions Section:** Full data table with mock data, column sorting, type filtering, and advanced natural-language date search.
