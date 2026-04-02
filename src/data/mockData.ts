@@ -301,5 +301,25 @@ export const MOCK_TRANSACTIONS: Transaction[] = [
     category: "Health",
     type: "expense",
   },
+  {
+    id: uuidv4(),
+    date: "2023-12-18",
+    amount: 120,
+    category: "Entertainment",
+    type: "expense",
+  },
+  {
+    id: uuidv4(),
+    date: "2023-12-20",
+    amount: 500,
+    category: "Bonus",
+    type: "income",
+  },
+  {
+    id: uuidv4(),
+    date: "2023-12-22",
+    amount: 90,
+    category: "Health",
+    type: "expense",
+  },
 ];
-

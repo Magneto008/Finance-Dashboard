@@ -12,7 +12,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LayoutDashboard, Monitor, Moon, ShieldAlert, Sun, User } from "lucide-react";
+import {
+  LayoutDashboard,
+  Monitor,
+  Moon,
+  ShieldAlert,
+  Sun,
+  User,
+} from "lucide-react";
 import type { Role } from "@/shared/types/finance";
 import type { Theme } from "@/app/context/ThemeContext";
 
@@ -29,7 +36,7 @@ export const AppHeader = ({ role, onSetRole, theme, onSetTheme }: Props) => {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <LayoutDashboard className="size-6 text-primary" />
-          <h1 className="text-xl font-bold tracking-tight bg-linear-to-r from-primary to-indigo-500 bg-clip-text text-transparent">
+          <h1 className="text-xl font-bold tracking-tight bg-foreground bg-clip-text text-transparent">
             FinanceDash
           </h1>
         </div>
@@ -41,9 +48,14 @@ export const AppHeader = ({ role, onSetRole, theme, onSetTheme }: Props) => {
             ) : (
               <User className="size-5 text-muted-foreground" />
             )}
-            <Select value={role} onValueChange={(value) => onSetRole(value as Role)}>
+            <Select
+              value={role}
+              onValueChange={(value) => onSetRole(value as Role)}
+            >
               <SelectTrigger className="h-8 w-30 text-xs">
-                <SelectValue>{role === "admin" ? "Admin" : "Viewer"}</SelectValue>
+                <SelectValue>
+                  {role === "admin" ? "Admin" : "Viewer"}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="admin">Admin</SelectItem>

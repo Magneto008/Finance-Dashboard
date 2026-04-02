@@ -178,7 +178,7 @@ export const TransactionTable = ({ transactions }: Props) => {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleColumnSort("id")}
-                    className="group h-auto p-0 font-medium"
+                    className="group h-auto p-0 font-medium hover:bg-transparent dark:hover:bg-transparent"
                   >
                     <span>ID</span>
                     <TransactionTableSortIcon
@@ -198,7 +198,7 @@ export const TransactionTable = ({ transactions }: Props) => {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleColumnSort("date")}
-                    className="group h-auto p-0 font-medium"
+                    className="group h-auto p-0 font-medium hover:bg-transparent dark:hover:bg-transparent"
                   >
                     <span>Date</span>
                     <TransactionTableSortIcon
@@ -218,7 +218,7 @@ export const TransactionTable = ({ transactions }: Props) => {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleColumnSort("category")}
-                    className="group h-auto p-0 font-medium"
+                    className="group h-auto p-0 font-medium hover:bg-transparent dark:hover:bg-transparent"
                   >
                     <span>Category</span>
                     <TransactionTableSortIcon
@@ -238,7 +238,7 @@ export const TransactionTable = ({ transactions }: Props) => {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleColumnSort("type")}
-                    className="group h-auto p-0 font-medium"
+                    className="group h-auto p-0 font-medium hover:bg-transparent dark:hover:bg-transparent"
                   >
                     <span>Type</span>
                     <TransactionTableSortIcon
@@ -258,7 +258,7 @@ export const TransactionTable = ({ transactions }: Props) => {
                     variant="ghost"
                     size="sm"
                     onClick={() => handleColumnSort("amount")}
-                    className="group ml-auto h-auto p-0 font-medium"
+                    className="group ml-auto h-auto p-0 font-medium hover:bg-transparent dark:hover:bg-transparent"
                   >
                     <TransactionTableSortIcon
                       className={cn(
