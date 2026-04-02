@@ -19,7 +19,7 @@ import {
 import { Plus, CreditCard } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { useAppContext } from "@/app/context/AppContext";
-import type { Transaction } from "@/types";
+import type { Transaction } from "@/shared/types/finance";
 
 export const TransactionForm = () => {
   const { state, addTx } = useAppContext();
@@ -63,7 +63,7 @@ export const TransactionForm = () => {
             <CreditCard className="size-5" /> Record Transaction
           </DialogTitle>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-4 py-4">
+        <form onSubmit={handleSubmit} className="space-y-4 pt-4">
           <div className="space-y-2">
             <Label htmlFor="type">Type</Label>
             <Select

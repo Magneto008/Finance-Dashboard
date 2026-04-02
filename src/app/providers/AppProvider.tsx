@@ -1,11 +1,11 @@
 import React, { useReducer, useEffect } from "react";
 import { AppContext } from "@/app/context/AppContext";
-import type { Transaction, Role, FilterGroup, AppState } from "@/types";
+import type { Transaction, Role, FilterGroup, AppState } from "@/shared/types/finance";
 import {
   getTransactions,
   addTransaction as dbAddTransaction,
   saveTransactions,
-} from "@/shared/lib/db";
+} from "@/features/transactions/lib/transactionsDb";
 import { MOCK_TRANSACTIONS } from "@/data/mockData";
 
 type Action =
@@ -72,3 +72,4 @@ export const AppProvider = ({ children }: { children: React.ReactNode }) => {
     </AppContext.Provider>
   );
 };
+

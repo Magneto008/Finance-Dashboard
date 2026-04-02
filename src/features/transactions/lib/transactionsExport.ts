@@ -1,4 +1,4 @@
-import type { Transaction } from "@/types";
+import type { Transaction } from "@/shared/types/finance";
 import * as xlsx from "xlsx";
 
 const downloadBlob = (blob: Blob, filename: string) => {

@@ -5,7 +5,7 @@ import type {
   FilterCondition,
   FilterGroup,
   LogicalOperator,
-} from "@/types";
+} from "@/shared/types/finance";
 import { Plus, Trash2, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,13 @@ import {
 } from "@/components/ui/select";
 import { v4 as uuidv4 } from "uuid";
 import { Card } from "@/components/ui/card";
+import {
+  addConditionToGroup,
+  removeConditionFromGroup,
+  removeGroupById,
+  updateConditionInGroup,
+  updateGroupJoinOperator as updateGroupJoinOperatorInList,
+} from "@/features/filters/lib/filterGroupOperations";
 
 type Props = {
   filterGroups: FilterGroup[];
@@ -37,7 +44,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
   };
 
   const removeGroup = (groupId: string) => {
-    setFilterGroups(filterGroups.filter((g) => g.id !== groupId));
+    setFilterGroups(removeGroupById(filterGroups, groupId));
   };
 
   const addCondition = (groupId: string) => {
@@ -47,14 +54,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
       operator: "contains",
       value: "",
     };
-    setFilterGroups(
-      filterGroups.map((group) => {
-        if (group.id === groupId) {
-          return { ...group, conditions: [...group.conditions, newCond] };
-        }
-        return group;
-      }),
-    );
+    setFilterGroups(addConditionToGroup(filterGroups, groupId, newCond));
   };
 
   const updateCondition = (
@@ -62,19 +62,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
     condId: string,
     updates: Partial<FilterCondition>,
   ) => {
-    setFilterGroups(
-      filterGroups.map((group) => {
-        if (group.id === groupId) {
-          return {
-            ...group,
-            conditions: group.conditions.map((c) =>
-              c.id === condId ? { ...c, ...updates } : c,
-            ),
-          };
-        }
-        return group;
-      }),
-    );
+    setFilterGroups(updateConditionInGroup(filterGroups, groupId, condId, updates));
   };
 
   const updateGroupJoinOperator = (
@@ -82,27 +70,12 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
     conditionJoin: LogicalOperator,
   ) => {
     setFilterGroups(
-      filterGroups.map((group) => {
-        if (group.id === groupId) {
-          return { ...group, conditionJoin };
-        }
-        return group;
-      }),
+      updateGroupJoinOperatorInList(filterGroups, groupId, conditionJoin),
     );
   };
 
   const removeCondition = (groupId: string, condId: string) => {
-    setFilterGroups(
-      filterGroups.map((group) => {
-        if (group.id === groupId) {
-          return {
-            ...group,
-            conditions: group.conditions.filter((c) => c.id !== condId),
-          };
-        }
-        return group;
-      }),
-    );
+    setFilterGroups(removeConditionFromGroup(filterGroups, groupId, condId));
   };
 
   const clearFilters = () => setFilterGroups([]);
@@ -290,3 +263,4 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
     </div>
   );
 };
+

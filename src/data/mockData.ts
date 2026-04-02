@@ -1,4 +1,4 @@
-import type { Transaction } from "@/types";
+import type { Transaction } from "@/shared/types/finance";
 import { v4 as uuidv4 } from "uuid";
 
 export const MOCK_TRANSACTIONS: Transaction[] = [
@@ -302,3 +302,4 @@ export const MOCK_TRANSACTIONS: Transaction[] = [
     type: "expense",
   },
 ];
+

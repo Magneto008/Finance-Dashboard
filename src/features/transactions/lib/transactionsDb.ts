@@ -1,4 +1,4 @@
-import type { Transaction } from "@/types";
+import type { Transaction } from "@/shared/types/finance";
 
 const DB_NAME = "FinanceDashboardDB";
 const STORE_NAME = "transactions";

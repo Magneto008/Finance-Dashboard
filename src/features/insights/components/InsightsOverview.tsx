@@ -1,4 +1,4 @@
-import type { Transaction } from "@/types";
+import type { Transaction } from "@/shared/types/finance";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   TrendingDown,
@@ -7,67 +7,29 @@ import {
   Calendar,
   CreditCard,
 } from "lucide-react";
+import { computeInsightMetrics } from "@/features/insights/lib/insightMetrics";
 
 type Props = {
   transactions: Transaction[];
 };
 
 export const InsightsOverview = ({ transactions }: Props) => {
-  const expenses = transactions.filter((t) => t.type === "expense");
-  const income = transactions.filter((t) => t.type === "income");
-
-  const categoryMap: Record<string, number> = {};
-  expenses.forEach((t) => {
-    categoryMap[t.category] = (categoryMap[t.category] || 0) + Number(t.amount);
-  });
-
-  let topCategory = "N/A";
-  let maxSpend = 0;
-  for (const [cat, amt] of Object.entries(categoryMap)) {
-    if (amt > maxSpend) {
-      maxSpend = amt;
-      topCategory = cat;
-    }
-  }
-
-  const monthlyExpenses: Record<string, number> = {};
-  expenses.forEach((expenseTransaction) => {
-    const monthKey = expenseTransaction.date.slice(0, 7); // YYYY-MM
-    monthlyExpenses[monthKey] =
-      (monthlyExpenses[monthKey] || 0) + Number(expenseTransaction.amount);
-  });
-
-  const sortedMonths = Object.keys(monthlyExpenses).sort((a, b) =>
-    a.localeCompare(b),
-  );
-  const latestMonth = sortedMonths[sortedMonths.length - 1];
-  const previousMonth = sortedMonths[sortedMonths.length - 2];
-  const latestMonthExpense = latestMonth ? monthlyExpenses[latestMonth] : 0;
-  const previousMonthExpense = previousMonth
-    ? monthlyExpenses[previousMonth]
-    : 0;
-  const monthlyDeltaPercent =
-    previousMonthExpense > 0
-      ? ((latestMonthExpense - previousMonthExpense) / previousMonthExpense) *
-        100
-      : 0;
-
-  const avgExpense =
-    expenses.length > 0
-      ? expenses.reduce((acc, t) => acc + Number(t.amount), 0) / expenses.length
-      : 0;
-  const totalExpense = expenses.reduce((acc, t) => acc + Number(t.amount), 0);
-  const totalIncome = income.reduce((acc, t) => acc + Number(t.amount), 0);
-  const savingsRate =
-    totalIncome > 0 ? ((totalIncome - totalExpense) / totalIncome) * 100 : 0;
-  const netBalance = totalIncome - totalExpense;
-
-  const latestTransactionDate =
-    transactions.length > 0
-      ? [...transactions].sort(
-          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-        )[0].date
-      : "N/A";
+  const {
+    topCategory,
+    maxSpend,
+    savingsRate,
+    monthlyDeltaPercent,
+    latestMonth,
+    previousMonth,
+    avgExpense,
+    totalIncome,
+    totalExpense,
+    netBalance,
+    latestTransactionDate,
+    incomeCount,
+    expenseCount,
+    transactionCount,
+  } = computeInsightMetrics(transactions);
 
   const formatCurrency = (value: number) =>
     value.toLocaleString("en-US", { minimumFractionDigits: 2 });
@@ -151,7 +113,7 @@ export const InsightsOverview = ({ transactions }: Props) => {
             ${formatCurrency(totalIncome)}
           </div>
           <p className="text-xs text-muted-foreground mt-1">
-            {income.length} income records
+            {incomeCount} income records
           </p>
         </CardContent>
       </Card>
@@ -168,7 +130,7 @@ export const InsightsOverview = ({ transactions }: Props) => {
             ${formatCurrency(totalExpense)}
           </div>
           <p className="text-xs text-muted-foreground mt-1">
-            {expenses.length} expense records
+            {expenseCount} expense records
           </p>
         </CardContent>
       </Card>
@@ -197,7 +159,7 @@ export const InsightsOverview = ({ transactions }: Props) => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {transactions.length} transactions
+            {transactionCount} transactions
           </div>
           <p className="text-xs text-muted-foreground mt-1">
             Latest: {latestTransactionDate}

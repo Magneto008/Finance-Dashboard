@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { AppState, Transaction, Role, FilterGroup } from "@/types";
+import type { AppState, Transaction, Role, FilterGroup } from "@/shared/types/finance";
 
 type Action =
   | { type: "SET_TRANSACTIONS"; payload: Transaction[] }
@@ -22,3 +22,4 @@ export const useAppContext = () => {
   }
   return context;
 };
+

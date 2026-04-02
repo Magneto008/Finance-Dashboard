@@ -1,4 +1,4 @@
-import type { Transaction } from "@/types";
+import type { Transaction } from "@/shared/types/finance";
 import {
   Card,
   CardContent,
@@ -17,6 +17,10 @@ import {
   Area,
   AreaChart,
 } from "recharts";
+import {
+  buildBalanceData,
+  buildCategoryData,
+} from "@/features/dashboard/lib/chartData";
 
 type Props = {
   transactions: Transaction[];
@@ -37,8 +41,6 @@ const COLORS = [
   "#a855f7",
   "#14b8a6",
 ];
-type BalancePoint = { date: string; balance: number };
-
 const formatCurrency = (value: unknown) => {
   if (Array.isArray(value)) {
     return `$${Number(value[0] ?? 0)}`;
@@ -47,41 +49,8 @@ const formatCurrency = (value: unknown) => {
 };
 
 export const DashboardCharts = ({ transactions }: Props) => {
-  const dateMap: Record<string, number> = {};
-
-  const sorted = [...transactions].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-  );
-
-  let runningBalance = 0;
-  const balanceData: BalancePoint[] = [];
-
-  sorted.forEach((transaction) => {
-    if (transaction.type === "income")
-      runningBalance += Number(transaction.amount);
-    else if (transaction.type === "expense")
-      runningBalance -= Number(transaction.amount);
-
-    dateMap[transaction.date] = runningBalance;
-  });
-
-  Object.keys(dateMap).forEach((date) => {
-    balanceData.push({ date, balance: dateMap[date] });
-  });
-
-  const expenses = transactions.filter((t) => t.type === "expense");
-  const categoryMap: Record<string, number> = {};
-  expenses.forEach((t) => {
-    categoryMap[t.category] = (categoryMap[t.category] || 0) + Number(t.amount);
-  });
-
-  const categoryData = Object.keys(categoryMap)
-    .map((name, index) => ({
-      name,
-      value: categoryMap[name],
-      fill: COLORS[index % COLORS.length],
-    }))
-    .sort((a, b) => b.value - a.value);
+  const balanceData = buildBalanceData(transactions);
+  const categoryData = buildCategoryData(transactions, COLORS);
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
@@ -197,3 +166,4 @@ export const DashboardCharts = ({ transactions }: Props) => {
     </div>
   );
 };
+
