@@ -37,10 +37,18 @@ const CONDITION_JOIN_OPTIONS: LogicalOperator[] = ["AND", "OR"];
 
 export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
   const addGroup = () => {
+    if (filterGroups.length >= 5) return;
+    const newId = uuidv4();
     setFilterGroups([
       ...filterGroups,
-      { id: uuidv4(), conditionJoin: "AND", conditions: [] },
+      { id: newId, conditionJoin: "AND", conditions: [] },
     ]);
+
+    setTimeout(() => {
+      document
+        .getElementById(`filter-group-${newId}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 50);
   };
 
   const removeGroup = (groupId: string) => {
@@ -102,8 +110,14 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
               Clear All
             </Button>
           )}
-          <Button size="sm" onClick={addGroup} className="w-full sm:w-auto">
-            <Plus className="size-4 mr-2" /> Add Filter Group
+          <Button
+            size="sm"
+            onClick={addGroup}
+            className="w-full sm:w-auto"
+            disabled={filterGroups.length >= 5}
+          >
+            <Plus className="size-4 mr-2" />
+            {filterGroups.length >= 5 ? "Limit Reached" : "Add Filter Group"}
           </Button>
         </div>
       </div>
@@ -114,7 +128,7 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
           <Fragment key={group.id}>
             {/* Visual Inter-group OR Separator */}
             {gIndex > 0 && (
-              <div className="flex items-center gap-4 py-2">
+               <div className="flex items-center gap-4 py-2">
                 <div className="h-px bg-border flex-1" />
                 <span className="text-xs font-bold text-muted-foreground uppercase bg-muted px-3 py-1 rounded-full tracking-wider">
                   OR
@@ -123,7 +137,10 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
               </div>
             )}
 
-            <Card className="overflow-hidden py-0 gap-0 shadow-md transition-all rounded-lg">
+            <Card
+              id={`filter-group-${group.id}`}
+              className="overflow-hidden py-0 gap-0 shadow-md transition-all rounded-lg"
+            >
               {/* Group Header: Join Logic & Delete */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-4 py-3 bg-muted/20 border-b border-border/50">
                 <div className="flex flex-wrap items-center gap-2 text-sm">
@@ -263,4 +280,3 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
     </div>
   );
 };
-
