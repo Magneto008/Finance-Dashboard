@@ -124,9 +124,9 @@ export const TransactionTable = ({ transactions }: Props) => {
 
   return (
     <Card className="overflow-hidden py-0 gap-0">
-      <CardHeader className="border-b bg-muted/20 py-4">
+      <CardHeader className="border-b bg-muted/20 py-4 px-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <CardTitle className="text-lg font-semibold">
+          <CardTitle className="text-lg font-semibold text-foreground">
             Transaction History
           </CardTitle>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -141,14 +141,14 @@ export const TransactionTable = ({ transactions }: Props) => {
             </div>
 
             {/* Filter & Sort Controls */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <Select
                 value={typeFilter}
                 onValueChange={(value) =>
                   value && setTypeFilter(value as "all" | "income" | "expense")
                 }
               >
-                <SelectTrigger className="w-27.5 bg-background">
+                <SelectTrigger className="w-27.5 bg-background flex-1 sm:flex-none">
                   <SelectValue placeholder="Type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -164,7 +164,7 @@ export const TransactionTable = ({ transactions }: Props) => {
                   value && setSortField(value as SortField)
                 }
               >
-                <SelectTrigger className="w-27.5 bg-background">
+                <SelectTrigger className="w-27.5 bg-background flex-1 sm:flex-none">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
@@ -180,7 +180,7 @@ export const TransactionTable = ({ transactions }: Props) => {
                 variant="outline"
                 size="icon"
                 onClick={toggleSortDirection}
-                className="shrink-0"
+                className="shrink-0 ml-auto sm:ml-0"
               >
                 {sortDirection === "asc" ? (
                   <ArrowUpAZ className="h-4 w-4" />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppProvider } from "@/app/providers/AppProvider";
 import { ThemeProvider } from "@/app/providers/ThemeProvider";
 import { DashboardSummary } from "@/features/dashboard/components/DashboardSummary";
@@ -41,10 +41,20 @@ const MainLayout = () => {
   const { state, dispatch } = useAppContext();
   const { setTheme, theme } = useTheme();
 
-  // Local state for advanced UI
+  // Local state for advanced UI with localStorage persistence
   const [activeTab, setActiveTab] = useState<
     "dashboard" | "transactions" | "insights"
-  >("dashboard");
+  >(() => {
+    const saved = localStorage.getItem("finance-dashboard-active-tab");
+    if (saved === "dashboard" || saved === "transactions" || saved === "insights") {
+      return saved as "dashboard" | "transactions" | "insights";
+    }
+    return "dashboard";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("finance-dashboard-active-tab", activeTab);
+  }, [activeTab]);
 
   const filteredTransactions = filterTransactions(
     state.transactions,
