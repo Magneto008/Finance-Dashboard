@@ -22,6 +22,11 @@ import {
 import { ArrowDownAZ, ArrowUpAZ, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type Props = {
   transactions: Transaction[];
@@ -130,15 +135,43 @@ export const TransactionTable = ({ transactions }: Props) => {
             Transaction History
           </CardTitle>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            <div className="relative w-full lg:w-72">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search..."
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                className="pl-9 bg-background"
-              />
-            </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="relative w-full lg:w-72">
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search..."
+                    value={searchTerm}
+                    onChange={(event) => setSearchTerm(event.target.value)}
+                    className="pl-9 bg-background focus-visible:ring-1"
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent
+                side="bottom"
+                align="start"
+                className="p-3 shadow-xl border-border bg-popover text-popover-foreground max-w-80"
+              >
+                <div className="space-y-2">
+                  <p className="font-semibold text-xs text-primary flex items-center gap-1.5">
+                    <Search className="size-3" />
+                    Natural Language Search
+                  </p>
+                  <p className="text-[11px] leading-relaxed text-muted-foreground">
+                    Try typing periods like <span className="text-foreground font-medium italic">"last 2 weeks"</span>, 
+                    <span className="text-foreground font-medium italic">"February"</span>, or 
+                    <span className="text-foreground font-medium italic">"last year"</span>.
+                  </p>
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {["last week", "yesterday", "january", "2023"].map((tag) => (
+                      <span key={tag} className="px-1.5 py-0.5 rounded-md bg-muted text-[10px] font-mono text-muted-foreground">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </TooltipContent>
+            </Tooltip>
 
             {/* Filter & Sort Controls */}
             <div className="flex items-center gap-2 w-full sm:w-auto">
