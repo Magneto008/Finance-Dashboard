@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import * as chrono from "chrono-node";
 import type { Transaction } from "@/types";
 import {
   Table,
@@ -37,9 +38,9 @@ export const TransactionTable = ({ transactions }: Props) => {
   const [sortField, setSortField] = useState<SortField>("date");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
-  // --- Logic remains exactly as provided ---
   const filteredAndSortedTransactions = useMemo(() => {
     const normalizedSearch = searchTerm.trim().toLowerCase();
+    const dateResults = searchTerm ? chrono.parse(searchTerm) : [];
 
     return [...transactions]
       .filter((transaction) => {
@@ -51,6 +52,39 @@ export const TransactionTable = ({ transactions }: Props) => {
           return true;
         }
 
+        const matchesDate = dateResults.some((result) => {
+          const { start, end } = result;
+          const tDate = new Date(transaction.date);
+
+          if (end) {
+            return tDate >= start.date() && tDate <= end.date();
+          }
+
+          if (result.text.toLowerCase().includes("week")) {
+            const startRange = start.date();
+            const endRange = new Date(startRange);
+            endRange.setDate(endRange.getDate() + 7);
+            return tDate >= startRange && tDate <= endRange;
+          }
+
+          const matchesYear = start.isCertain("year")
+            ? tDate.getFullYear() === start.get("year")
+            : true;
+          const matchesMonth = start.isCertain("month")
+            ? tDate.getMonth() === (start.get("month") || 0) - 1
+            : true;
+          const matchesDay = start.isCertain("day")
+            ? tDate.getDate() === start.get("day")
+            : true;
+
+          const anySpecified =
+            start.isCertain("year") ||
+            start.isCertain("month") ||
+            start.isCertain("day");
+
+          return anySpecified && matchesYear && matchesMonth && matchesDay;
+        });
+
         const searchableParts = [
           transaction.id,
           transaction.date,
@@ -59,8 +93,11 @@ export const TransactionTable = ({ transactions }: Props) => {
           transaction.amount.toString(),
         ];
 
-        return searchableParts.some((part) =>
-          part.toLowerCase().includes(normalizedSearch),
+        return (
+          matchesDate ||
+          searchableParts.some((part) =>
+            part.toLowerCase().includes(normalizedSearch),
+          )
         );
       })
       .sort((a, b) => {
@@ -93,7 +130,6 @@ export const TransactionTable = ({ transactions }: Props) => {
             Transaction History
           </CardTitle>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-            {/* Search with Icon */}
             <div className="relative w-full lg:w-72">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input

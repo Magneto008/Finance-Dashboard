@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Plus, CreditCard } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
-import { useAppContext } from "@/app/providers/AppProvider";
+import { useAppContext } from "@/app/context/AppContext";
 import type { Transaction } from "@/types";
 
 export const TransactionForm = () => {

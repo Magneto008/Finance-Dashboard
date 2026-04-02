@@ -119,11 +119,12 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
             Build complex queries to filter your transactions.
           </p>
         </div>
-        <div className="flex w-full gap-2 sm:w-auto shrink-0">
+        <div className="flex flex-col-reverse sm:flex-row w-full gap-2 sm:w-auto shrink-0">
           <Button
             variant="ghost"
             onClick={clearFilters}
             disabled={filterGroups.length === 0}
+            className="w-full sm:w-auto"
           >
             Clear All
           </Button>
@@ -132,22 +133,6 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
           </Button>
         </div>
       </div>
-
-      {/* Empty State
-      {filterGroups.length === 0 && (
-        <div className="text-center py-12 border-2 border-dashed border-border rounded-lg bg-muted/10">
-          <p className="text-muted-foreground text-sm">
-            No active filters. Showing all transactions.
-          </p>
-          <Button
-            variant="link"
-            onClick={addGroup}
-            className="mt-2 text-primary"
-          >
-            Create your first filter
-          </Button>
-        </div>
-      )} */}
 
       {/* Groups Mapping */}
       <div className="space-y-4">
@@ -166,8 +151,8 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
 
             <Card className="overflow-hidden py-0 gap-0 shadow-md transition-all">
               {/* Group Header: Join Logic & Delete */}
-              <div className="flex items-center justify-between px-4 py-3 bg-muted/40 border-b border-border/50">
-                <div className="flex items-center gap-2 text-sm">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-4 py-3 bg-muted/40 border-b border-border/50">
+                <div className="flex flex-wrap items-center gap-2 text-sm">
                   <span className="text-muted-foreground font-medium">
                     Match
                   </span>
@@ -177,11 +162,10 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
                       updateGroupJoinOperator(group.id, val as LogicalOperator)
                     }
                   >
-                    <SelectTrigger className="w-25 h-8 bg-background font-semibold">
+                    <SelectTrigger className="w-24 h-8 bg-background font-semibold">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {/* FIXED: Now correctly mapping over the CONDITION_JOIN_OPTIONS array */}
                       {CONDITION_JOIN_OPTIONS.map((option) => (
                         <SelectItem key={option} value={option}>
                           {option === "AND" ? "ALL" : "ANY"}
@@ -190,18 +174,19 @@ export const AdvancedFilter = ({ filterGroups, setFilterGroups }: Props) => {
                     </SelectContent>
                   </Select>
                   <span className="text-muted-foreground font-medium">
-                    of the following rules:
+                    of the rules:
                   </span>
                 </div>
 
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 h-8 px-2"
+                  className="text-muted-foreground hover:text-destructive hover:bg-destructive/10 h-8 px-2 w-full sm:w-auto justify-center sm:justify-start"
                   onClick={() => removeGroup(group.id)}
                   title="Delete entire group"
                 >
-                  <Trash2 className="size-4 mr-2" /> Delete Group
+                  <Trash2 className="size-4 sm:mr-2" />
+                  <span className="sm:inline">Delete Group</span>
                 </Button>
               </div>
 

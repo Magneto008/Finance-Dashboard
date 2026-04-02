@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { AppProvider, useAppContext } from "@/app/providers/AppProvider";
-import { ThemeProvider, useTheme } from "@/app/providers/ThemeProvider";
+import { AppProvider } from "@/app/providers/AppProvider";
+import { ThemeProvider } from "@/app/providers/ThemeProvider";
 import { DashboardSummary } from "@/features/dashboard/components/DashboardSummary";
 import { DashboardCharts } from "@/features/dashboard/components/DashboardCharts";
 import { TransactionTable } from "@/features/transactions/components/TransactionTable";
@@ -34,6 +34,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAppContext } from "@/app/context/AppContext";
+import { useTheme } from "@/app/context/ThemeContext";
 
 const MainLayout = () => {
   const { state, dispatch } = useAppContext();
@@ -129,12 +131,12 @@ const MainLayout = () => {
       {/* Main Content */}
       <main className="container mx-auto flex-1 px-4 py-4 md:pb-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          {/* LEFT: Tabs */}
-          <div className="flex items-center gap-1 rounded-md bg-muted/50 p-1 w-fit">
+          {/* Tabs: Full width and centered on mobile */}
+          <div className="flex items-center gap-1 rounded-lg bg-muted/50 p-1 w-full md:w-fit overflow-x-auto">
             <Button
               size="sm"
               variant={activeTab === "dashboard" ? "default" : "ghost"}
-              className="px-3"
+              className="flex-1 md:flex-none px-4"
               onClick={() => setActiveTab("dashboard")}
             >
               Dashboard
@@ -143,7 +145,7 @@ const MainLayout = () => {
             <Button
               size="sm"
               variant={activeTab === "transactions" ? "default" : "ghost"}
-              className="px-3"
+              className="flex-1 md:flex-none px-4"
               onClick={() => setActiveTab("transactions")}
             >
               Transactions
@@ -152,7 +154,7 @@ const MainLayout = () => {
             <Button
               size="sm"
               variant={activeTab === "insights" ? "default" : "ghost"}
-              className="px-3"
+              className="flex-1 md:flex-none px-4"
               onClick={() => setActiveTab("insights")}
             >
               Insights
@@ -160,45 +162,51 @@ const MainLayout = () => {
           </div>
 
           {/* RIGHT: Actions */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 md:overflow-visible md:pb-0">
-            {activeTab === "transactions" && <TransactionForm />}
+          <div className="flex items-center gap-2 w-full md:w-auto">
+            {activeTab === "transactions" && (
+              <div className="flex-1 md:flex-none">
+                <TransactionForm />
+              </div>
+            )}
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="whitespace-nowrap"
-                  disabled={!filteredTransactions.length}
-                >
-                  <Download className="size-4 mr-2" />
-                  Export
-                </Button>
-              </DropdownMenuTrigger>
+            <div className="flex-1 md:flex-none">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full whitespace-nowrap"
+                    disabled={!filteredTransactions.length}
+                  >
+                    <Download className="size-4 mr-2" />
+                    Export
+                  </Button>
+                </DropdownMenuTrigger>
 
-              <DropdownMenuContent align="end" className="w-44">
-                <DropdownMenuItem
-                  onClick={() => exportToJSON(filteredTransactions)}
-                >
-                  <FileDown className="size-4 mr-2" />
-                  JSON
-                </DropdownMenuItem>
+                <DropdownMenuContent align="end" className="w-44">
+                  <DropdownMenuItem
+                    onClick={() => exportToJSON(filteredTransactions)}
+                  >
+                    <FileDown className="size-4 mr-2" />
+                    JSON
+                  </DropdownMenuItem>
 
-                <DropdownMenuItem
-                  onClick={() => exportToCSV(filteredTransactions)}
-                >
-                  <FileDown className="size-4 mr-2" />
-                  CSV
-                </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => exportToCSV(filteredTransactions)}
+                  >
+                    <FileDown className="size-4 mr-2" />
+                    CSV
+                  </DropdownMenuItem>
 
-                <DropdownMenuItem
-                  onClick={() => exportToExcel(filteredTransactions)}
-                >
-                  <Download className="size-4 mr-2" />
-                  Excel
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <DropdownMenuItem
+                    onClick={() => exportToExcel(filteredTransactions)}
+                  >
+                    <Download className="size-4 mr-2" />
+                    Excel
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
         </div>
 

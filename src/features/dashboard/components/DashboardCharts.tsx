@@ -13,7 +13,6 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell,
   Legend,
   Area,
   AreaChart,
@@ -48,10 +47,8 @@ const formatCurrency = (value: unknown) => {
 };
 
 export const DashboardCharts = ({ transactions }: Props) => {
-  // Compute chart data
   const dateMap: Record<string, number> = {};
 
-  // Sort transactions by date
   const sorted = [...transactions].sort(
     (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
   );
@@ -68,12 +65,10 @@ export const DashboardCharts = ({ transactions }: Props) => {
     dateMap[transaction.date] = runningBalance;
   });
 
-  // Convert to array
   Object.keys(dateMap).forEach((date) => {
     balanceData.push({ date, balance: dateMap[date] });
   });
 
-  // Category breakdown for expenses
   const expenses = transactions.filter((t) => t.type === "expense");
   const categoryMap: Record<string, number> = {};
   expenses.forEach((t) => {
@@ -81,15 +76,16 @@ export const DashboardCharts = ({ transactions }: Props) => {
   });
 
   const categoryData = Object.keys(categoryMap)
-    .map((name) => ({
+    .map((name, index) => ({
       name,
       value: categoryMap[name],
+      fill: COLORS[index % COLORS.length],
     }))
     .sort((a, b) => b.value - a.value);
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-      {/* Line Chart span 4 */}
+      {/* Line Chart */}
       <Card className="col-span-1 lg:col-span-4 shadow-md border-border">
         <CardHeader>
           <CardTitle>Balance History</CardTitle>
@@ -154,7 +150,7 @@ export const DashboardCharts = ({ transactions }: Props) => {
         </CardContent>
       </Card>
 
-      {/* Pie Chart span 3 */}
+      {/* Pie Chart */}
       <Card className="col-span-1 lg:col-span-3 shadow-md border-border">
         <CardHeader>
           <CardTitle>Expense Breakdown</CardTitle>
@@ -173,14 +169,7 @@ export const DashboardCharts = ({ transactions }: Props) => {
                     outerRadius={90}
                     paddingAngle={2}
                     dataKey="value"
-                  >
-                    {categoryData.map((_entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
+                  />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "var(--card)",

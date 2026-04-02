@@ -1,7 +1,5 @@
-/* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState } from "react";
-
-export type Theme = "dark" | "light" | "system";
+import { useEffect, useState } from "react";
+import { ThemeProviderContext, type Theme } from "@/app/context/ThemeContext";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -9,17 +7,6 @@ type ThemeProviderProps = {
   storageKey?: string;
 };
 
-type ThemeProviderState = {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-};
-
-const initialState: ThemeProviderState = {
-  theme: "system",
-  setTheme: () => null,
-};
-
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 const THEME_DB_NAME = "FinanceDashboardPreferences";
 const THEME_STORE_NAME = "preferences";
 const THEME_DB_VERSION = 1;
@@ -47,11 +34,15 @@ const getStoredTheme = async (storageKey: string): Promise<Theme | null> => {
     const request = store.get(storageKey);
 
     request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve((request.result?.value as Theme | undefined) ?? null);
+    request.onsuccess = () =>
+      resolve((request.result?.value as Theme | undefined) ?? null);
   });
 };
 
-const setStoredTheme = async (storageKey: string, theme: Theme): Promise<void> => {
+const setStoredTheme = async (
+  storageKey: string,
+  theme: Theme,
+): Promise<void> => {
   const db = await openThemeDB();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(THEME_STORE_NAME, "readwrite");
@@ -67,7 +58,6 @@ export function ThemeProvider({
   children,
   defaultTheme = "system",
   storageKey = "vite-ui-theme",
-  ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(defaultTheme);
 
@@ -75,11 +65,9 @@ export function ThemeProvider({
     const loadTheme = async () => {
       try {
         const savedTheme = await getStoredTheme(storageKey);
-        if (savedTheme) {
-          setTheme(savedTheme);
-        }
+        if (savedTheme) setTheme(savedTheme);
       } catch (error) {
-        console.error("Failed to read theme from IndexedDB", error);
+        console.error("Failed to read theme", error);
       }
     };
 
@@ -87,12 +75,12 @@ export function ThemeProvider({
   }, [storageKey]);
 
   useEffect(() => {
-    const root = window.document.documentElement;
-
+    const root = document.documentElement;
     root.classList.remove("light", "dark");
 
     if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
         ? "dark"
         : "light";
 
@@ -112,17 +100,8 @@ export function ThemeProvider({
   };
 
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <ThemeProviderContext.Provider value={value}>
       {children}
     </ThemeProviderContext.Provider>
   );
 }
-
-export const useTheme = () => {
-  const context = useContext(ThemeProviderContext);
-
-  if (context === undefined)
-    throw new Error("useTheme must be used within a ThemeProvider");
-
-  return context;
-};
